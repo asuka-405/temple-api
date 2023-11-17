@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import History from "./pages/History"
 import Editor from "./pages/edit"
 import Temples from "./pages/temples"
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Temples />} />
           <Route path="/edit/:encodedTemple" element={<Editor />} />
           <Route path="/edit/new" element={<Editor isNewEntry={true} />} />
+          <Route path="/history" element={<History />} />
         </Routes>
       </Router>
     </TempleContext.Provider>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Brihadeeswarar Temple",
+    "location": "Thanjavur, Tamil Nadu",
+    "description": "Built in the 11th century, this temple is known for its massive tower and intricate carvings."
+  },
+  {
+    "id": 2,
+    "name": "Kailashnath Temple",
+    "location": "Ellora, Maharashtra",
+    "description": "This temple is famous for its rock-cut architecture and is dedicated to Lord Shiva."
+  },
+  {
+    "id": 3,
+    "name": "Konark Sun Temple",
+    "location": "Konark, Odisha",
+    "description": "Built in the 13th century, this temple is dedicated to the Sun God and is known for its intricate carvings."
+  },
+  {
+    "id": 4,
+    "name": "Meenakshi Temple",
+    "location": "Madurai, Tamil Nadu",
+    "description": "This temple is dedicated to Goddess Meenakshi and is known for its towering gopurams and intricate carvings."
+  },
+  {
+    "id": 5,
+    "name": "Somnath Temple",
+    "location": "Gir Somnath, Gujarat",
+    "description": "This temple is one of the 12 Jyotirlingas and is dedicated to Lord Shiva."
+  }
+]

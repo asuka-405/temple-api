@@ -1,8 +1,22 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+
 // Import required modules
 const express = require("express")
 const cors = require("cors")
+const mongoose = require("mongoose")
+const History = require("./history.schema")
 
-// Create an Express app
+// Connect to the local MongoDB database
+mongoose.connect(process.env.DATABASE_URL)
+// Check if the connection is successful
+const db = mongoose.connection
+db.on("error", console.error.bind(console, "Connection error:"))
+db.once("open", () => {
+  console.log("Connected to the database")
+})
+
 const app = express()
 
 // Middleware: Enable CORS
@@ -13,45 +27,15 @@ app.use(
 )
 
 app.use(express.json())
+app.use(saveHistory)
+// Error middleware
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json({ message: "Internal server error" })
+})
 
 // Sample data for demonstration
-let data = [
-  {
-    id: 1,
-    name: "Brihadeeswarar Temple",
-    location: "Thanjavur, Tamil Nadu",
-    description:
-      "Built in the 11th century, this temple is known for its massive tower and intricate carvings.",
-  },
-  {
-    id: 2,
-    name: "Kailashnath Temple",
-    location: "Ellora, Maharashtra",
-    description:
-      "This temple is famous for its rock-cut architecture and is dedicated to Lord Shiva.",
-  },
-  {
-    id: 3,
-    name: "Konark Sun Temple",
-    location: "Konark, Odisha",
-    description:
-      "Built in the 13th century, this temple is dedicated to the Sun God and is known for its intricate carvings.",
-  },
-  {
-    id: 4,
-    name: "Meenakshi Temple",
-    location: "Madurai, Tamil Nadu",
-    description:
-      "This temple is dedicated to Goddess Meenakshi and is known for its towering gopurams and intricate carvings.",
-  },
-  {
-    id: 5,
-    name: "Somnath Temple",
-    location: "Gir Somnath, Gujarat",
-    description:
-      "This temple is one of the 12 Jyotirlingas and is dedicated to Lord Shiva.",
-  },
-]
+let data = require("./sample-data.json")
 
 // RESTful API routes
 
@@ -65,11 +49,8 @@ app.get("/api/data/:id", (req, res) => {
   const itemId = parseInt(req.params.id)
   const item = data.find((item) => item.id === itemId)
 
-  if (item) {
-    res.json(item)
-  } else {
-    res.status(404).json({ message: "Item not found" })
-  }
+  if (item) res.json(item)
+  else res.status(404).json({ message: "Item not found" })
 })
 
 // POST: Create a new item
@@ -105,5 +86,43 @@ app.delete("/api/data/:id", (req, res) => {
 const port = process.env.PORT || 3000
 
 app.listen(port, () => {
-  console.log(`👉Server is running on port ${port}⚡`)
+  console.log(`👉 Server is running on port ${port}⚡`)
+})
+
+async function saveHistory(req, res, next) {
+  const History = require("./history.schema") // Import the History model
+
+  const history = new History({
+    method: req.method,
+    path: req.url,
+  })
+
+  try {
+    await history.save()
+    next()
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Internal server error" })
+  }
+}
+
+// GET: Retrieve all saved history
+app.get("/api/history", async (req, res) => {
+  try {
+    const history = await History.find({})
+    res.json(history)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
+// Add a new API route to clear the history
+app.delete("/api/history", async (req, res) => {
+  try {
+    await History.deleteMany({})
+    res.json({ message: "History cleared successfully" })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Internal server error" })
+  }
 })

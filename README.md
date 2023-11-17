@@ -2,6 +2,24 @@
 
 This project contains both the API and React frontend.
 
+#### Setup
+
+```sh
+npm i yarn -g
+yarn install
+cd ./frontend
+yarn install
+
+cd ../
+yarn dev # express server will start @ port 3000
+
+# in another terminal instance
+cd /path/to/project/
+cd ./frontend
+yarn dev # react app will start serving @ port 4200
+
+```
+
 ## API
 
 The API is built using the following technologies:
@@ -70,7 +88,6 @@ There are two components:
  */
 
 // FILEPATH: /src/components/NewTemple.js
-
 /**
  * NewTemple component for creating a new temple entry in the edit page.
  * @param {Object} props - Component props.
@@ -79,14 +96,12 @@ There are two components:
  */
 
 // FILEPATH: /src/App.js
-
 /**
  * Main App component for rendering the temple list and edit page.
  * @returns {JSX.Element} - Rendered App component.
  */
 
 // FILEPATH: /src/index.js
-
 /**
  * Entry point for the React application.
  * Uses React Router DOM for routing and Context API for data binding.
